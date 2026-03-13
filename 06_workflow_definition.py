@@ -34,8 +34,8 @@ WORKFLOW_CLUSTER_ID  = os.getenv("WORKFLOW_CLUSTER_ID",  "").strip()
 
 JOB_NAME = "genai_demo_ingestion_pipeline"
 
-# Schedule: run daily at 02:00 UTC. Set SCHEDULE_CRON = None to disable.
-SCHEDULE_CRON     = "0 0 2 * * ?"   # Quartz cron — every day at 02:00 UTC
+# Schedule: run once a month on the 1st at 02:00 UTC.
+SCHEDULE_CRON     = "0 0 2 1 * ?"   # Quartz cron — 1st of every month at 02:00 UTC
 SCHEDULE_TIMEZONE = "UTC"
 
 if not NOTEBOOK_PATH_PREFIX:
@@ -253,7 +253,7 @@ print(f"\nJob URL      : {JOB_URL}")
 # MAGIC %md
 # MAGIC ## ✓ Workflow Complete
 # MAGIC
-# MAGIC The ingestion pipeline DAG is live and scheduled to run daily at 02:00 UTC.
+# MAGIC The ingestion pipeline DAG is live and scheduled to run on the 1st of every month at 02:00 UTC.
 # MAGIC Drop a new document into the Volume and the index will update automatically
 # MAGIC on the next run — or trigger it manually from the Job URL above.
 # MAGIC
