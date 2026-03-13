@@ -23,34 +23,30 @@
 
 # COMMAND ----------
 
-# ── USER CONFIGURATION ────────────────────────────────────────────────────────
-# Unity Catalog location
-CATALOG      = "main"           # Change to your target catalog
-SCHEMA       = "genai_demo"     # Will be created if it does not exist
-VOLUME_NAME  = "source_docs"    # Databricks Volume name (must already exist under CATALOG.SCHEMA)
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-# Table names
+# ── CONFIGURATION (loaded from .env) ─────────────────────────────────────────
+CATALOG      = os.getenv("CATALOG",      "main")
+SCHEMA       = os.getenv("SCHEMA",       "genai_demo")
+VOLUME_NAME  = os.getenv("VOLUME_NAME",  "source_docs")
+
+LLM_MODEL    = os.getenv("LLM_MODEL",    "databricks-meta-llama-3-3-70b-instruct")
+EMBED_MODEL  = os.getenv("EMBED_MODEL",  "databricks-gte-large-en")
+
+VS_ENDPOINT           = os.getenv("VS_ENDPOINT",           "genai_demo_vs_endpoint")
+SERVING_ENDPOINT_NAME = os.getenv("SERVING_ENDPOINT_NAME", "genai_demo_rag_endpoint")
+
+CHUNK_SIZE    = int(os.getenv("CHUNK_SIZE",    512))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", 64))
+
+# ── Derived names ─────────────────────────────────────────────────────────────
 BRONZE_TABLE = f"{CATALOG}.{SCHEMA}.bronze_documents"
 SILVER_TABLE = f"{CATALOG}.{SCHEMA}.silver_chunks"
 GOLD_TABLE   = f"{CATALOG}.{SCHEMA}.gold_embeddings"
-
-# Vector Search
-VS_ENDPOINT  = "genai_demo_vs_endpoint"   # Your Vector Search endpoint name
 VS_INDEX     = f"{CATALOG}.{SCHEMA}.gold_embeddings_index"
-
-# Model Serving
-SERVING_ENDPOINT_NAME = "genai_demo_rag_endpoint"
-
-# LLM & Embeddings (Foundation Model API)
-LLM_MODEL   = "databricks-meta-llama-3-1-70b-instruct"
-EMBED_MODEL = "databricks-gte-large-en"
-
-# Chunking
-CHUNK_SIZE    = 512   # characters per chunk
-CHUNK_OVERLAP = 64    # character overlap between chunks
-
-# Volume path (auto-derived)
-VOLUME_PATH = f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME_NAME}"
+VOLUME_PATH  = f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME_NAME}"
 
 # ── Print summary ─────────────────────────────────────────────────────────────
 print("=" * 60)

@@ -20,22 +20,25 @@
 
 # COMMAND ----------
 
-# ── CONFIGURATION (keep in sync with 00_setup.py) ────────────────────────────
-CATALOG      = "main"
-SCHEMA       = "genai_demo"
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-VS_ENDPOINT  = "genai_demo_vs_endpoint"
-VS_INDEX     = f"{CATALOG}.{SCHEMA}.gold_embeddings_index"
+# ── CONFIGURATION (loaded from .env) ─────────────────────────────────────────
+CATALOG     = os.getenv("CATALOG",     "main")
+SCHEMA      = os.getenv("SCHEMA",      "genai_demo")
+VS_ENDPOINT = os.getenv("VS_ENDPOINT", "genai_demo_vs_endpoint")
+LLM_MODEL   = os.getenv("LLM_MODEL",   "databricks-meta-llama-3-3-70b-instruct")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "databricks-gte-large-en")
+TOP_K       = int(os.getenv("TOP_K",   3))
 
-LLM_MODEL    = "databricks-meta-llama-3-3-70b-instruct"
-EMBED_MODEL  = "databricks-gte-large-en"
-
-TOP_K        = 3   # Number of chunks to retrieve per query
+# ── Derived names ─────────────────────────────────────────────────────────────
+VS_INDEX         = f"{CATALOG}.{SCHEMA}.gold_embeddings_index"
+REGISTERED_MODEL = f"{CATALOG}.{SCHEMA}.rag_chain"
 
 from databricks.sdk import WorkspaceClient as _WC
 _current_user     = _WC().current_user.me().user_name
 MLFLOW_EXPERIMENT = f"/Users/{_current_user}/genai_demo_rag_experiment"
-REGISTERED_MODEL  = f"{CATALOG}.{SCHEMA}.rag_chain"
 
 DATABRICKS_HOST = spark.conf.get("spark.databricks.workspaceUrl", "")
 if not DATABRICKS_HOST.startswith("http"):

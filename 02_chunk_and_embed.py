@@ -23,21 +23,23 @@
 
 # COMMAND ----------
 
-# ── CONFIGURATION (keep in sync with 00_setup.py) ────────────────────────────
-CATALOG       = "main"
-SCHEMA        = "genai_demo"
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-BRONZE_TABLE  = f"{CATALOG}.{SCHEMA}.bronze_documents"
-SILVER_TABLE  = f"{CATALOG}.{SCHEMA}.silver_chunks"
-GOLD_TABLE    = f"{CATALOG}.{SCHEMA}.gold_embeddings"
+# ── CONFIGURATION (loaded from .env) ─────────────────────────────────────────
+CATALOG     = os.getenv("CATALOG",    "main")
+SCHEMA      = os.getenv("SCHEMA",     "genai_demo")
+EMBED_MODEL = os.getenv("EMBED_MODEL","databricks-gte-large-en")
 
-EMBED_MODEL   = "databricks-gte-large-en"
+CHUNK_SIZE       = int(os.getenv("CHUNK_SIZE",       512))
+CHUNK_OVERLAP    = int(os.getenv("CHUNK_OVERLAP",    64))
+EMBED_BATCH_SIZE = int(os.getenv("EMBED_BATCH_SIZE", 100))
 
-CHUNK_SIZE    = 512   # characters per chunk
-CHUNK_OVERLAP = 64    # character overlap between chunks
-
-# Embedding batch size — Foundation Model API max is 150 inputs per request
-EMBED_BATCH_SIZE = 100
+# ── Derived names ─────────────────────────────────────────────────────────────
+BRONZE_TABLE = f"{CATALOG}.{SCHEMA}.bronze_documents"
+SILVER_TABLE = f"{CATALOG}.{SCHEMA}.silver_chunks"
+GOLD_TABLE   = f"{CATALOG}.{SCHEMA}.gold_embeddings"
 
 print(f"Bronze  : {BRONZE_TABLE}")
 print(f"Silver  : {SILVER_TABLE}")

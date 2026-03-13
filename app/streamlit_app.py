@@ -9,17 +9,22 @@ Run with:
     streamlit run app/streamlit_app.py
 """
 
-import json
+import os
 import streamlit as st
+from dotenv import load_dotenv
 from databricks.sdk import WorkspaceClient
 
-# ── CONFIGURATION ─────────────────────────────────────────────────────────────
-CATALOG     = "main"
-SCHEMA      = "genai_demo"
-VS_INDEX    = f"{CATALOG}.{SCHEMA}.gold_embeddings_index"
-LLM_MODEL   = "databricks-meta-llama-3-3-70b-instruct"
-EMBED_MODEL = "databricks-gte-large-en"
-TOP_K       = 3
+load_dotenv()
+
+# ── CONFIGURATION (loaded from .env) ─────────────────────────────────────────
+CATALOG     = os.getenv("CATALOG",     "main")
+SCHEMA      = os.getenv("SCHEMA",      "genai_demo")
+LLM_MODEL   = os.getenv("LLM_MODEL",   "databricks-meta-llama-3-3-70b-instruct")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "databricks-gte-large-en")
+TOP_K       = int(os.getenv("TOP_K",   3))
+
+# ── Derived names ─────────────────────────────────────────────────────────────
+VS_INDEX = f"{CATALOG}.{SCHEMA}.gold_embeddings_index"
 
 # ── PAGE CONFIG ───────────────────────────────────────────────────────────────
 st.set_page_config(

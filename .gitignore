@@ -15,6 +15,9 @@ env/
 databricks.env
 *.token
 
+# Environment variables (contains secrets)
+.env
+
 # Jupyter / IPython
 .ipynb_checkpoints/
 *.ipynb
