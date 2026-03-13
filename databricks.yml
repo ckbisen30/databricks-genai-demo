@@ -9,11 +9,10 @@ targets:
   dev:
     mode: development
     default: true
-    workspace:
-      host: https://dbc-64d4611e-21e7.cloud.databricks.com
+    # host is read from DATABRICKS_HOST env var (set in .env)
 
   ## Optionally, there could be 'staging' or 'prod' targets here.
   #
   # prod:
   #   workspace:
-  #     host: https://dbc-64d4611e-21e7.cloud.databricks.com
+  #     host: https://your-prod-workspace.cloud.databricks.com
