@@ -23,11 +23,16 @@
 
 # COMMAND ----------
 
-# ── CONFIGURATION (keep in sync with 00_setup.py) ────────────────────────────
-CATALOG      = "main"
-SCHEMA       = "genai_demo"
-VOLUME_NAME  = "source_docs"
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
+# ── CONFIGURATION (loaded from .env) ─────────────────────────────────────────
+CATALOG     = os.getenv("CATALOG",     "main")
+SCHEMA      = os.getenv("SCHEMA",      "genai_demo")
+VOLUME_NAME = os.getenv("VOLUME_NAME", "source_docs")
+
+# ── Derived names ─────────────────────────────────────────────────────────────
 BRONZE_TABLE = f"{CATALOG}.{SCHEMA}.bronze_documents"
 VOLUME_PATH  = f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME_NAME}"
 

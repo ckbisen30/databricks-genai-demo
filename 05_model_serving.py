@@ -21,12 +21,18 @@
 
 # COMMAND ----------
 
-# ── CONFIGURATION (keep in sync with 00_setup.py) ────────────────────────────
-CATALOG               = "main"
-SCHEMA                = "genai_demo"
-REGISTERED_MODEL      = f"{CATALOG}.{SCHEMA}.rag_chain"
-MODEL_VERSION         = 3          # Update to latest registered version
-SERVING_ENDPOINT_NAME = "genai_demo_rag_endpoint"
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# ── CONFIGURATION (loaded from .env) ─────────────────────────────────────────
+CATALOG               = os.getenv("CATALOG",               "main")
+SCHEMA                = os.getenv("SCHEMA",                "genai_demo")
+MODEL_VERSION         = int(os.getenv("MODEL_VERSION",     3))
+SERVING_ENDPOINT_NAME = os.getenv("SERVING_ENDPOINT_NAME", "genai_demo_rag_endpoint")
+
+# ── Derived names ─────────────────────────────────────────────────────────────
+REGISTERED_MODEL = f"{CATALOG}.{SCHEMA}.rag_chain"
 
 # Inference table — logs every request + response to Delta
 INFERENCE_TABLE_CATALOG = CATALOG

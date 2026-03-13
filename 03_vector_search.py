@@ -22,24 +22,25 @@
 
 # COMMAND ----------
 
-# ── CONFIGURATION (keep in sync with 00_setup.py) ────────────────────────────
-CATALOG      = "main"
-SCHEMA       = "genai_demo"
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-GOLD_TABLE   = f"{CATALOG}.{SCHEMA}.gold_embeddings"
+# ── CONFIGURATION (loaded from .env) ─────────────────────────────────────────
+CATALOG     = os.getenv("CATALOG",     "main")
+SCHEMA      = os.getenv("SCHEMA",      "genai_demo")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "databricks-gte-large-en")
+VS_ENDPOINT = os.getenv("VS_ENDPOINT", "genai_demo_vs_endpoint")
+TOP_K       = int(os.getenv("TOP_K",   3))
 
-VS_ENDPOINT  = "genai_demo_vs_endpoint"   # Must already exist in your workspace
-VS_INDEX     = f"{CATALOG}.{SCHEMA}.gold_embeddings_index"
-
-EMBED_MODEL  = "databricks-gte-large-en"
+# ── Derived names ─────────────────────────────────────────────────────────────
+GOLD_TABLE = f"{CATALOG}.{SCHEMA}.gold_embeddings"
+VS_INDEX   = f"{CATALOG}.{SCHEMA}.gold_embeddings_index"
 
 # Column names in the Gold table
-PRIMARY_KEY_COL  = "chunk_id"
-EMBEDDING_COL    = "embedding"
-TEXT_COL         = "chunk_text"
-
-# How many results to return in retrieval queries
-TOP_K = 3
+PRIMARY_KEY_COL = "chunk_id"
+EMBEDDING_COL   = "embedding"
+TEXT_COL        = "chunk_text"
 
 print(f"Gold table  : {GOLD_TABLE}")
 print(f"VS endpoint : {VS_ENDPOINT}")
